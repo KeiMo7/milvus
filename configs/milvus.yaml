@@ -1712,6 +1712,20 @@ quotaAndLimits:
     # specific conditions, such as collection has been dropped), true means always reject all dql requests.
     forceDeny: false
 
+# quotaAdmission is the unified concurrency admission ledger shared by
+# retrieval (search/query) and index build tasks. It is complementary to the
+# rate-side quotaAndLimits above: it bounds in-flight concurrency rather than
+# request rate. The master switch defaults to false, under which every
+# request bypasses the ledger with no queue, reject or counting and the
+# existing rate limiters and task schedulers are untouched.
+quotaAdmission:
+  enabled: false # master switch; false = direct pass-through, no accounting
+  maxQueueLength: 1024 # per-collection wait queue cap; overflow is hard-rejected
+  maxQueueWait: 30s # max time an item may wait before a queue-timeout failure
+  maxConsecutiveServes: 1 # multiplier capping one collection's consecutive window (x its fairness weight)
+  minRetryAfter: 10ms # lower bound of the suggested retry-after on hard reject
+  maxRetryAfter: 5s # upper bound of the suggested retry-after on hard reject
+
 trace:
   # trace exporter type, default is stdout,
   # optional values: ['noop','stdout', 'jaeger', 'otlp']

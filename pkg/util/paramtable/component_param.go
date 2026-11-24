@@ -107,6 +107,7 @@ type ComponentParam struct {
 
 	CommonCfg       commonConfig
 	QuotaConfig     quotaConfig
+	AdmissionCfg    admissionConfig
 	AutoIndexConfig AutoIndexConfig
 	GpuConfig       gpuConfig
 	TraceCfg        traceConfig
@@ -169,6 +170,7 @@ func (p *ComponentParam) init(bt *BaseTable) {
 		p.MinioCfg.UseCRC32C.SwapTempValue("true")
 	}
 	p.QuotaConfig.init(bt)
+	p.AdmissionCfg.init(bt)
 	p.AutoIndexConfig.init(bt)
 	p.TraceCfg.init(bt)
 	p.HolmesCfg.init(bt)
